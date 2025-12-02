@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 const {
   AUTH_PORT = process.env.PORT || 4000,
-  MONGO_URI = "mongodb://localhost:27017",
+  MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017",
   MONGO_DB = "tripTracker",
   AUTH_SECRET = "change-me-to-a-long-random-string",
   NODE_ENV = "development",

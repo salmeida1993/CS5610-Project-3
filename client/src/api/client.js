@@ -14,7 +14,9 @@ export async function api(path, { method = "GET", data } = {}) {
     try {
       const msg = await res.json();
       err.message = msg.message || err.message;
-    } catch {}
+    } catch {
+      // ignore
+    }
     throw err;
   }
 
