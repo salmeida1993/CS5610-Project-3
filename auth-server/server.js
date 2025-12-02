@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 const {
   AUTH_PORT = process.env.PORT || 4000,
-  MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017",
+  MONGO_URI = process.env.MONGO_URI,
   MONGO_DB = "tripTracker",
   AUTH_SECRET = "change-me-to-a-long-random-string",
   NODE_ENV = "development",
@@ -250,13 +250,24 @@ if (!u) {
 
 // ---- BOOT ----
 async function boot() {
-  await client.connect();
-  db = client.db(MONGO_DB);
-  users = db.collection("users");
-  await users.createIndex({ email: 1 }, { unique: true });
-  app.listen(AUTH_PORT, () => {
-    console.log(`[auth] http://127.0.0.1:${AUTH_PORT}`);
-  });
+  try {
+    console.log("Connecting to MongoDB:", MONGO_URI.replace(/:\/\/.*@/, "://<hidden>@"));
+    
+    await client.connect();
+    console.log("MongoDB connected");
+
+    db = client.db(MONGO_DB);
+    users = db.collection("users");
+
+    await users.createIndex({ email: 1 }, { unique: true });
+
+    app.listen(AUTH_PORT, () => {
+      console.log(`[auth] running on port ${AUTH_PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start auth server:", err);
+    process.exit(1);
+  }
 }
 
 boot().catch((e) => {
