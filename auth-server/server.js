@@ -250,6 +250,7 @@ if (!u) {
 
 // ---- BOOT ----
 async function boot() {
+  console.log("MONGO_URI:", MONGO_URI);
   try {
     console.log("Connecting to MongoDB:", MONGO_URI.replace(/:\/\/.*@/, "://<hidden>@"));
     
